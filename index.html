@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SINABOS — Form Scan Rombel</title>
+<style>
+:root{--navy:#102a43;--teal:#0f766e;--ink:#18324a;--muted:#64748b;--line:#e2e8f0;--bg:#f5f7fb;--green:#15803d;--red:#b91c1c;--blue:#1d4ed8}
+*{box-sizing:border-box;margin:0;padding:0}body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+header{background:linear-gradient(125deg,#102a43,#0f766e);color:#fff;padding:28px 18px 34px}.wrap{max-width:1180px;margin:auto;padding:0 18px}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#99f6e4;font-weight:800;margin-bottom:6px}h1{font-size:clamp(25px,4vw,38px);letter-spacing:-.03em;line-height:1.1}.sub{max-width:820px;color:#dbeafe;margin-top:10px;font-size:15px}.badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.badge{border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.1);padding:6px 10px;border-radius:999px;font-size:12px}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:-18px 0 18px;position:relative}.card,.panel{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 10px 28px rgba(15,42,67,.06)}.card{padding:17px}.card .num{font-size:28px;font-weight:800;color:var(--navy);display:block}.card .label{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.18fr .82fr;gap:16px}.panel{padding:20px;margin-bottom:16px}.panel h2{color:var(--navy);font-size:18px;margin-bottom:5px}.panel h3{color:var(--navy);font-size:15px;margin:18px 0 8px}.lead{font-size:13px;color:var(--muted);margin-bottom:14px}.full{grid-column:1/-1}
+.scan-box{background:linear-gradient(145deg,#f0fdfa,#eff6ff);border:1px solid #bae6fd;border-radius:15px;padding:14px}.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.row button{flex:0 0 auto}input,select,button{font:inherit;border-radius:11px;padding:10px 12px;border:1px solid #cbd5e1;background:#fff;color:var(--ink)}input:focus,select:focus{outline:3px solid #99f6e4;border-color:var(--teal)}button{border:0;background:var(--teal);color:#fff;font-weight:800;cursor:pointer;white-space:nowrap}button:hover{filter:brightness(.94)}button.secondary{background:#e2e8f0;color:var(--navy)}button.dark{background:var(--navy)}button.danger{background:#dc2626}button:disabled{opacity:.55;cursor:wait}
+#barcodeInput{font-size:19px;font-weight:700;letter-spacing:.04em;width:100%}.camera{display:none;width:100%;border-radius:13px;margin-top:12px;background:#0f172a;max-height:250px;object-fit:cover}.camera.on{display:block}.camera-status{font-size:12px;color:var(--muted);margin-top:7px}
+label{display:block;font-size:12px;font-weight:800;color:var(--navy);margin:8px 0 4px}.hint,.note{font-size:12px;color:var(--muted);margin-top:9px}.hint strong{color:var(--navy)}.muted{color:var(--muted)}
+.form-card{margin-top:14px;border:1px solid #99f6e4;background:#fff;border-radius:14px;padding:15px}.form-head{display:flex;justify-content:space-between;gap:10px;align-items:start;border-bottom:1px solid var(--line);padding-bottom:12px;margin-bottom:10px}.form-head strong{color:var(--navy)}.form-head .meta{text-align:right;font-size:12px;color:var(--muted)}.pill{display:inline-flex;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800;background:#dbeafe;color:#1d4ed8}.item-row{display:grid;grid-template-columns:1.7fr .6fr .75fr auto;gap:8px;align-items:end;padding:10px 0;border-bottom:1px dashed #dbe4ed}.item-row:last-child{border-bottom:0}.item-row label{margin:0}.item-row button{padding:9px 11px}.active-note{font-size:12px;background:#eff6ff;border-radius:9px;padding:8px;color:#1e40af;margin:8px 0}.result{border-radius:12px;padding:12px;margin-top:12px;font-size:14px}.success{background:#ecfdf5;border:1px solid #86efac;color:#166534}.failure{background:#fef2f2;border:1px solid #fecaca;color:var(--red)}.info{background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:720px;font-size:13px}th{background:var(--navy);color:#fff;text-align:left;padding:10px 11px}td{padding:10px 11px;border-bottom:1px solid #eef2f7;vertical-align:top}tr:last-child td{border-bottom:0}.status{display:inline-flex;border-radius:999px;padding:4px 8px;font-size:11px;font-weight:800}.borrow{background:#fee2e2;color:#991b1b}.return{background:#dcfce7;color:#166534}.empty{padding:16px;text-align:center;color:var(--muted)}.section-title{display:flex;justify-content:space-between;align-items:end;gap:10px;margin-bottom:12px}.section-title h2{margin:0}.section-title small{color:var(--muted)}details{margin-top:16px;border-top:1px solid var(--line);padding-top:12px}summary{cursor:pointer;color:var(--navy);font-weight:800;font-size:13px}.footer{color:var(--muted);font-size:12px;text-align:center;padding:10px 0 30px}
+@media(max-width:850px){.cards{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}@media(max-width:620px){.wrap{padding:0 12px}.panel{padding:15px}.row{flex-direction:column;align-items:stretch}.row button{width:100%}.cards{gap:9px}.card{padding:13px}.card .num{font-size:24px}.item-row{grid-template-columns:1fr 1fr 1fr auto}.item-row .book-field{grid-column:1/-1}.item-row button{align-self:end}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="eyebrow">SINABOS · Sistem Informasi Buku Operasional Sekolah</div>
+  <h1>Scan rombel, isi transaksi,<br>tersimpan di admin.</h1>
+  <p class="sub">SMP LABSCHOOL UNTAD PALU · Scan barcode rombel untuk membuka form. Guru mengisi nama, memilih satu atau beberapa mapel, jumlah buku, dan kondisi. Tanggal otomatis dari sistem.</p>
+  <div class="badges"><span class="badge">Multi-mapel dalam satu transaksi</span><span class="badge">Tanggal otomatis</span><span class="badge">Admin monitoring</span><span class="badge">Apps Script + Neon PostgreSQL</span></div>
+</div></header>
+
+<main class="wrap">
+<section class="cards">
+  <div class="card"><span class="num" id="cJenis">–</span><span class="label">Jenis buku aktif</span></div>
+  <div class="card"><span class="num" id="cTersedia">–</span><span class="label">Buku tersedia</span></div>
+  <div class="card"><span class="num" id="cAktif">–</span><span class="label">Buku masih dipinjam</span></div>
+  <div class="card"><span class="num" id="cTransaksi">–</span><span class="label">Transaksi hari ini</span></div>
+</section>
+
+<div class="grid">
+<section class="panel">
+  <h2>📷 Scan Barcode Rombel</h2>
+  <p class="lead">Barcode hanya membuka data rombel dan daftar mapel sesuai kelas. Transaksi disimpan setelah form selesai diisi.</p>
+  <div class="scan-box">
+    <label for="barcodeInput">Barcode rombel</label>
+    <div class="row"><input id="barcodeInput" autocomplete="off" autofocus placeholder="Contoh: RBL-VII-A"><button class="dark" id="lookupBtn" onclick="lookupBarcode()">Scan &amp; Buka Form</button></div>
+    <div class="row" style="margin-top:4px"><button class="secondary" onclick="bukaKamera()">Buka Kamera</button><button class="secondary" onclick="tutupKamera()">Tutup Kamera</button></div>
+    <video id="videoScan" class="camera" playsinline></video>
+    <div id="cameraStatus" class="camera-status">Gunakan kamera HP, scanner USB, atau ketik kode untuk uji.</div>
+    <div id="lookupResult"></div>
+  </div>
+
+  <div id="transactionForm" class="form-card" hidden>
+    <div class="form-head"><div><span class="pill">FORM TRANSAKSI</span><br><strong id="formRombel">–</strong><br><small id="formBarcode" class="muted">–</small></div><div class="meta">Tanggal otomatis<br><strong id="formDate">–</strong></div></div>
+    <label for="txType">Jenis transaksi</label>
+    <select id="txType" onchange="gantiJenisTransaksi()" style="width:100%"><option value="pinjam">Peminjaman</option><option value="kembali">Pengembalian</option></select>
+    <label for="teacherName">Nama guru</label>
+    <input id="teacherName" placeholder="Ketik nama guru" style="width:100%">
+    <div id="activeNote" class="active-note" hidden></div>
+    <h3>Buku / mapel yang diproses</h3>
+    <div id="itemRows"></div>
+    <button class="secondary" onclick="tambahBaris()" style="margin-top:10px">+ Tambah mapel</button>
+    <div class="row" style="margin-top:14px"><button onclick="simpanTransaksi()" id="saveTxBtn">Simpan Transaksi</button><button class="secondary" onclick="batalForm()">Batal</button></div>
+    <div id="formResult"></div>
+  </div>
+  <p class="hint"><strong>Contoh alur:</strong> scan <code>RBL-VII-A</code> → pilih Peminjaman → Matematika 32 buku + IPA 32 buku → kondisi baik → Simpan.</p>
+</section>
+
+<section class="panel">
+  <h2>📥 Stok Buku Masuk</h2>
+  <p class="lead">Jenis buku diambil dari master. Input operasional hanya jumlah dan sumber diperoleh; tanggal terisi otomatis.</p>
+  <label for="stockBook">Jenis buku</label><select id="stockBook" style="width:100%"><option value="">Memuat…</option></select>
+  <label for="stockQty">Jumlah buku</label><input id="stockQty" type="number" min="1" step="1" placeholder="Contoh: 50" style="width:100%">
+  <label for="stockSource">Sumber diperoleh</label><input id="stockSource" placeholder="Contoh: BOS 2026 / hibah" style="width:100%">
+  <button onclick="simpanStok()" style="width:100%;margin-top:10px">Simpan Stok Masuk</button>
+  <p class="note">Tidak ada input nomor nota, anggota, harga, atau jatuh tempo.</p>
+
+  <h3>Admin menyimpan</h3>
+  <p class="note">Setiap submit menghasilkan kode transaksi, nama guru, rombel, tanggal, rincian multi-mapel, jumlah, kondisi, dan mutasi stok di Neon PostgreSQL.</p>
+</section>
+
+<section class="panel full">
+  <div class="section-title"><h2>🧾 Riwayat Transaksi Admin</h2><small>data tersimpan dari form guru</small></div>
+  <div class="table-wrap"><table><thead><tr><th>Kode / tanggal</th><th>Jenis</th><th>Guru</th><th>Rombel</th><th>Rincian mapel dan kondisi</th><th>Total</th></tr></thead><tbody id="tbTransactions"><tr><td colspan="6" class="empty">Memuat…</td></tr></tbody></table></div>
+</section>
+
+<section class="panel full">
+  <div class="section-title"><h2>⏳ Peminjaman Aktif per Rombel</h2><small>sisa buku yang belum dikembalikan</small></div>
+  <div class="table-wrap"><table><thead><tr><th>Rombel</th><th>Barcode</th><th>Mapel</th><th>Guru terakhir</th><th>Total pinjam</th><th>Total kembali</th><th>Sisa</th></tr></thead><tbody id="tbActive"><tr><td colspan="7" class="empty">Memuat…</td></tr></tbody></table></div>
+</section>
+
+<section class="panel full">
+  <div class="section-title"><h2>📊 Stok per Jenis Buku</h2><small>masuk + kembali − pinjam − rusak/hilang</small></div>
+  <div class="table-wrap"><table><thead><tr><th>Kode</th><th>Jenis buku</th><th>Mapel / kelas</th><th>Masuk</th><th>Dipinjam</th><th>Kembali</th><th>Tersedia</th></tr></thead><tbody id="tbStock"><tr><td colspan="7" class="empty">Memuat…</td></tr></tbody></table></div>
+</section>
+
+<section class="panel full">
+  <h2>⚙ Konfigurasi Starter Kit</h2><p class="lead">Untuk uji cepat. Database Neon hanya diakses oleh Apps Script; jangan masukkan connection string Neon ke browser.</p>
+  <details><summary>Buka konfigurasi</summary>
+    <label for="API_URL">APPS_SCRIPT_WEB_APP_URL</label><input id="API_URL" placeholder="https://script.google.com/macros/s/…/exec" style="width:100%">
+    <label for="API_TOKEN">API_TOKEN</label><input id="API_TOKEN" placeholder="Token starter kit" style="width:100%">
+    <div class="row" style="margin-top:10px"><button onclick="simpanKonfigurasi()">Simpan &amp; Muat Ulang</button><button class="secondary" onclick="tesAPI()">Tes API</button></div><div id="apiResult" class="note"></div>
+  </details>
+</section>
+</div>
+<p class="footer">SINABOS v3.0 · scan barcode rombel → form multi-mapel → aplikasi admin</p>
+</main>
+
+<script>
+const state = { books: [], stocks: [], transactions: [], active: [], lookup: null, items: [] };
+let stream = null, detector = null, scanning = false;
+let API_URL = localStorage.getItem('API_URL') || '', API_TOKEN = localStorage.getItem('API_TOKEN') || '';
+const $ = id => document.getElementById(id);
+const esc = value => String(value ?? '').replace(/[&<>'\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[c]));
+const today = () => new Date().toISOString().slice(0,10);
+const dateTime = value => value ? new Date(value).toLocaleString('id-ID',{dateStyle:'short',timeStyle:'short'}) : '–';
+['API_URL','API_TOKEN'].forEach(id => $(id).value = ({API_URL,API_TOKEN}[id]));
+
+function simpanKonfigurasi(){
+  API_URL=$('API_URL').value.trim(); API_TOKEN=$('API_TOKEN').value.trim();
+  localStorage.setItem('API_URL',API_URL); localStorage.setItem('API_TOKEN',API_TOKEN); location.reload();
+}
+
+async function init(){
+  if(!API_URL || !API_TOKEN){
+    $('tbTransactions').innerHTML='<tr><td colspan="6" class="empty">Isi URL Apps Script dan API token pada konfigurasi.</td></tr>';
+    $('tbActive').innerHTML='<tr><td colspan="7" class="empty">Menunggu konfigurasi.</td></tr>';
+    $('tbStock').innerHTML='<tr><td colspan="7" class="empty">Menunggu konfigurasi.</td></tr>'; return;
+  }
+  try{ await loadAdminData(); }
+  catch(err){ const m=esc(err.message||err); $('tbTransactions').innerHTML='<tr><td colspan="6" class="empty">Gagal memuat: '+m+'</td></tr>'; $('tbActive').innerHTML='<tr><td colspan="7" class="empty">Periksa URL Apps Script, token, koneksi Neon, dan Script Properties.</td></tr>'; }
+}
+
+async function loadAdminData(){
+  const r=await apiPost('adminData',{});
+  state.books=r.books||[]; state.stocks=r.stocks||[]; state.transactions=r.transactions||[]; state.active=r.active||[];
+  $('stockBook').innerHTML='<option value="">Pilih jenis buku…</option>'+state.books.map(b=>`<option value="${esc(b.id)}">${esc(b.judul)} — kelas ${esc(b.kelas_target)}</option>`).join('');
+  renderAdmin();
+}
+
+function renderAdmin(){
+  const available=state.stocks.reduce((n,b)=>n+Number(b.tersedia||0),0);
+  const active=state.active.reduce((n,b)=>n+Number(b.sisa||0),0);
+  const txToday=state.transactions.filter(t=>String(t.tanggal).slice(0,10)===today()).length;
+  $('cJenis').textContent=state.stocks.length; $('cTersedia').textContent=available; $('cAktif').textContent=active; $('cTransaksi').textContent=txToday;
+  $('tbTransactions').innerHTML=state.transactions.length?state.transactions.map(t=>`<tr>
+    <td><b>${esc(t.kode_transaksi)}</b><br><span class="muted">${esc(t.tanggal)} · ${dateTime(t.created_at)}</span></td>
+    <td><span class="status ${t.jenis_transaksi==='pinjam'?'borrow':'return'}">${t.jenis_transaksi==='pinjam'?'PEMINJAMAN':'PENGEMBALIAN'}</span></td>
+    <td>${esc(t.nama_guru)}</td><td>${esc(t.rombel)}<br><span class="muted">${esc(t.barcode)}</span></td>
+    <td>${esc(t.rincian||'–')}</td><td><b>${t.jumlah_total||0}</b> buku</td>
+  </tr>`).join(''):'<tr><td colspan="6" class="empty">Belum ada transaksi.</td></tr>';
+  $('tbActive').innerHTML=state.active.length?state.active.map(a=>`<tr><td><b>${esc(a.rombel)}</b></td><td>${esc(a.barcode)}</td><td>${esc(a.judul)}<br><span class="muted">${esc(a.mata_pelajaran||'')}</span></td><td>${esc(a.guru_terakhir||'–')}</td><td>${a.total_pinjam}</td><td>${a.total_kembali}</td><td><b style="color:#b91c1c">${a.sisa}</b></td></tr>`).join(''):'<tr><td colspan="7" class="empty">Tidak ada buku yang sedang dipinjam.</td></tr>';
+  $('tbStock').innerHTML=state.stocks.length?state.stocks.map(b=>`<tr><td><b>${esc(b.kode_buku)}</b></td><td>${esc(b.judul)}</td><td>${esc(b.mata_pelajaran||'–')}<br><span class="muted">Kelas ${esc(b.kelas_target)}</span></td><td>${b.total_masuk||0}</td><td>${b.total_pinjam||0}</td><td>${b.total_kembali||0}</td><td><b style="color:${Number(b.tersedia||0)<5?'#b91c1c':'#15803d'}">${b.tersedia||0}</b></td></tr>`).join(''):'<tr><td colspan="7" class="empty">Belum ada stok.</td></tr>';
+}
+
+async function apiPost(action,payload){
+  if(!API_URL||!API_TOKEN) throw new Error('APPS_SCRIPT_WEB_APP_URL dan API_TOKEN belum diisi.');
+  const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({token:API_TOKEN,action,...payload})});
+  const result=await response.json(); if(!result.ok) throw new Error(result.error||'API gagal memproses permintaan'); return result;
+}
+
+async function lookupBarcode(){
+  const barcode=$('barcodeInput').value.trim(); if(!barcode){$('barcodeInput').focus();return;}
+  const btn=$('lookupBtn');btn.disabled=true;btn.textContent='Membaca…';
+  try{
+    const r=await apiPost('scan',{barcode}); state.lookup=r; state.items=[];
+    $('formRombel').textContent='Rombel '+r.rombel+' · Kelas '+r.kelas_target; $('formBarcode').textContent=r.barcode; $('formDate').textContent=r.tanggal||today();
+    $('txType').value='pinjam'; $('teacherName').value=''; $('transactionForm').hidden=false;
+    updateActiveNote(); renderItemRows(); $('lookupResult').innerHTML=`<div class="result info">Barcode dikenali. Lengkapi form di bawah untuk menyimpan transaksi.</div>`;
+    $('teacherName').focus();
+  }catch(err){$('lookupResult').innerHTML=`<div class="result failure"><b>Barcode belum dikenali</b><br>${esc(err.message||err)}</div>`;}
+  finally{btn.disabled=false;btn.textContent='Scan & Buka Form';}
+}
+
+function pilihanBuku(){
+  if(!state.lookup) return [];
+  if($('txType').value==='kembali'){
+    return (state.lookup.aktif||[]).map(a=>({id:a.buku_id,label:(a.mata_pelajaran? a.mata_pelajaran+' — ':'')+a.judul+' (sisa '+a.sisa+')',max:a.sisa}));
+  }
+  return (state.lookup.books||[]).map(b=>({id:b.id,label:(b.mata_pelajaran?b.mata_pelajaran+' — ':'')+b.judul+' · kelas '+b.kelas_target,max:null}));
+}
+function updateActiveNote(){
+  const active=state.lookup&&state.lookup.aktif||[]; const el=$('activeNote');
+  if(active.length){el.hidden=false;el.textContent='Peminjaman aktif rombel ini: '+active.map(a=>a.judul+' ×'+a.sisa).join(', ')+'. Pilih Pengembalian bila ingin mengembalikan.';}
+  else{el.hidden=true;el.textContent='';}
+}
+function gantiJenisTransaksi(){state.items=[];updateActiveNote();renderItemRows();}
+function tambahBaris(){if(!state.lookup)return;state.items.push({buku_id:'',jumlah:1,kondisi:'baik'});renderItemRows();}
+function hapusBaris(i){state.items.splice(i,1);renderItemRows();}
+function ubahBaris(i,key,value){if(!state.items[i])return;state.items[i][key]=key==='jumlah'?Number(value):value;}
+function renderItemRows(){
+  if(!state.items.length)state.items.push({buku_id:'',jumlah:1,kondisi:'baik'});
+  const options=pilihanBuku();
+  $('itemRows').innerHTML=state.items.map((item,i)=>`<div class="item-row">
+    <div class="book-field"><label>Mapel / buku ${i+1}</label><select onchange="ubahBaris(${i},'buku_id',this.value)" style="width:100%"><option value="">Pilih mapel…</option>${options.map(o=>`<option value="${esc(o.id)}" ${item.buku_id===o.id?'selected':''}>${esc(o.label)}</option>`).join('')}</select></div>
+    <div><label>Jumlah</label><input type="number" min="1" step="1" value="${Number(item.jumlah)||1}" oninput="ubahBaris(${i},'jumlah',this.value)" style="width:100%"></div>
+    <div><label>Kondisi</label><select onchange="ubahBaris(${i},'kondisi',this.value)" style="width:100%"><option value="baik" ${item.kondisi==='baik'?'selected':''}>Baik</option><option value="rusak" ${item.kondisi==='rusak'?'selected':''}>Rusak</option><option value="hilang" ${item.kondisi==='hilang'?'selected':''}>Hilang</option></select></div>
+    <button class="danger" onclick="hapusBaris(${i})" title="Hapus baris">×</button>
+  </div>`).join('');
+  if($('txType').value==='kembali'&&!options.length)$('itemRows').innerHTML='<div class="result info">Tidak ada sisa buku aktif untuk rombel ini.</div>';
+}
+function batalForm(){state.lookup=null;state.items=[];$('transactionForm').hidden=true;$('lookupResult').innerHTML='';$('barcodeInput').value='';$('barcodeInput').focus();}
+
+async function simpanTransaksi(){
+  if(!state.lookup)return;
+  const nama_guru=$('teacherName').value.trim(), jenis_transaksi=$('txType').value;
+  const items=state.items.filter(x=>x.buku_id&&Number(x.jumlah)>0).map(x=>({buku_id:x.buku_id,jumlah:Number(x.jumlah),kondisi:x.kondisi||'baik'}));
+  if(!nama_guru){alert('Nama guru wajib diisi.');return;}
+  if(!items.length){alert('Tambahkan minimal satu mapel dan jumlah buku.');return;}
+  if(new Set(items.map(x=>x.buku_id)).size!==items.length){alert('Mapel yang sama cukup satu baris; ubah jumlah pada baris tersebut.');return;}
+  const btn=$('saveTxBtn');btn.disabled=true;btn.textContent='Menyimpan…';
+  try{
+    const r=await apiPost('simpanTransaksi',{barcode:state.lookup.barcode,jenis_transaksi,nama_guru,items});
+    $('formResult').innerHTML=`<div class="result success"><b>✓ Transaksi tersimpan di aplikasi admin</b><br>${esc(r.kode_transaksi)} · ${r.jenis_transaksi==='pinjam'?'Peminjaman':'Pengembalian'} · ${esc(r.nama_guru)} · ${r.jumlah_total} buku<br><span class="muted">Tanggal: ${esc(r.tanggal)}</span></div>`;
+    state.lookup=null;state.items=[];$('barcodeInput').value='';await loadAdminData();
+    setTimeout(()=>{$('transactionForm').hidden=true;$('formResult').innerHTML='';$('barcodeInput').focus();},1200);
+  }catch(err){$('formResult').innerHTML=`<div class="result failure"><b>Transaksi belum tersimpan</b><br>${esc(err.message||err)}</div>`;}
+  finally{btn.disabled=false;btn.textContent='Simpan Transaksi';}
+}
+
+async function simpanStok(){
+  const buku_id=$('stockBook').value,jumlah=Number($('stockQty').value),sumber_perolehan=$('stockSource').value.trim();
+  if(!buku_id||!(jumlah>0)||!sumber_perolehan){alert('Pilih jenis buku, isi jumlah, dan isi sumber diperoleh.');return;}
+  try{await apiPost('stokMasuk',{buku_id,jumlah,sumber_perolehan});alert('Stok masuk tersimpan.');$('stockQty').value='';$('stockSource').value='';if(API_URL)await loadAdminData();}
+  catch(err){alert(err.message||err);}
+}
+async function tesAPI(){try{const r=await apiPost('__ping__',{});$('apiResult').textContent='✓ API aktif: '+(r.message||'ok');}catch(err){$('apiResult').textContent='✗ '+(err.message||err);}}
+
+async function bukaKamera(){
+  if(!('BarcodeDetector'in window)){$('cameraStatus').textContent='Browser belum mendukung BarcodeDetector. Gunakan scanner USB atau input manual.';return;}
+  try{const supported=BarcodeDetector.getSupportedFormats?await BarcodeDetector.getSupportedFormats():[];const wanted=['code_128','ean_13','ean_8','qr_code'].filter(x=>!supported.length||supported.includes(x));detector=new BarcodeDetector(wanted.length?{formats:wanted}:undefined);stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});$('videoScan').srcObject=stream;$('videoScan').classList.add('on');await $('videoScan').play();scanning=true;$('cameraStatus').textContent='Kamera aktif. Arahkan ke barcode rombel.';scanLoop();}
+  catch(err){$('cameraStatus').textContent='Kamera tidak dapat dibuka: '+(err.message||err);}
+}
+async function scanLoop(){if(!scanning)return;try{const codes=await detector.detect($('videoScan'));if(codes&&codes.length){$('barcodeInput').value=codes[0].rawValue;tutupKamera();lookupBarcode();return;}}catch(err){}requestAnimationFrame(scanLoop);}
+function tutupKamera(){scanning=false;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null;}$('videoScan').srcObject=null;$('videoScan').classList.remove('on');$('cameraStatus').textContent='Gunakan kamera HP, scanner USB, atau ketik kode untuk uji.';}
+$('barcodeInput').addEventListener('keydown',e=>{if(e.key==='Enter')lookupBarcode();});
+init();
+</script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v31edd6df95cf4e85bb4c19e7a9bdbcba1788362987495" integrity="sha512-iIg7k2xntmwu6/uSb5tpc/hySgZc4eoL31yB29W6tJFo2akwjPWcEqnCEdJvGexCL0KEQwVYv5BlowfhVz26hg==" data-cf-beacon='{"version":"2024.11.0","token":"1954b47c125f43f8b4338b3c4f804e4f","spa":2}' crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a3d6957b583790f2',t:'MTc4OTc5OTg2OA=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
