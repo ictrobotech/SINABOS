@@ -6,10 +6,10 @@
 
 | Kelompok | Hasil | Bukti |
 |---|---:|---|
-| HTTP/API, database/auth, formatter CSV, upgrade legacy, tema per akun | **52/52 lulus** | `artifacts/test-unit.tap` |
+| HTTP/API, database/auth, formatter CSV, upgrade legacy, tema per akun | **53/53 lulus** | `artifacts/test-unit.tap` |
 | PostgreSQL asli: multi-koneksi dan privilege/role runtime | **6/6 lulus** | `artifacts/postgres-concurrency-performance.json` |
 | Browser Chromium: desktop/mobile dan keamanan UI | **13/13 lulus** | `artifacts/browser-test-output.txt`, `browser-results.json` |
-| **Total skenario otomatis** | **71/71 lulus** | Kode dapat dijalankan ulang di `tests/` |
+| **Total skenario otomatis** | **72/72 lulus** | Kode dapat dijalankan ulang di `tests/` |
 | Instalasi dependency Node 22 | Sukses | `artifacts/install-node22.txt` |
 | Build Cloudflare Pages Function | Sukses | `artifacts/cloudflare-build.txt` |
 | Audit dependency | Pemeriksaan awal 0 temuan; audit akhir terhalang maintenance npm 503 | `artifacts/install-node22.txt`, `npm-audit.json` |
@@ -127,3 +127,12 @@ Tema antarmuka kini tersimpan **per akun di database** (kolom `tema` pada tabel 
 - PostgreSQL asli 6/6 lulus. Benchmark lokal (median): dashboard 4,06 ms · simpan transaksi 1,46 ms · daftar buku 1,65 ms · riwayat 1,73 ms.
 - Catatan lingkungan: seluruh suite tidak dijalankan dalam satu proses bash yang sama (kotak uji 2 GB dapat kehabisan memori — lihat Riwayat 4.1.1); PG lokal 17 diprovisi ulang (initdb + role/database) karena direktori data tidak ikut tersimpan antar sesi.
 - Perbaikan kecil: bug fungsi `saveTheme` (variabel plpgsql `tema` bentrok dengan nama kolom → "column reference \"tema\" is ambiguous") ditemukan lewat pemanggilan dispatch langsung dan diperbaiki dengan mengganti nama variabel menjadi `v_tema` pada `001-v4.sql` dan `005-tema-akun.sql` sebelum rilis.
+
+## Riwayat 4.2.1 (21 Sep 2026)
+
+Halaman login kini ikut menampilkan tema pilihan admin: aksi `siteTheme` (baca publik, tanpa data pengguna, dibatasi 60 permintaan/menit per IP) mengembalikan tema akun admin aktif pertama, sehingga pengunjung yang belum login — termasuk di mesin bersama yang membersihkan data — melihat tema sekolah sejak layar masuk. Perubahan tema tetap hanya lewat `saveTheme` admin. Frontend menyegarkan tema login saat halaman dibuka dan setelah logout; tanpa data (fungsi lama di database) login kembali ke Modern secara aman.
+
+- Unit 53/53 lulus (tambah: `siteTheme` publik mengikuti tema admin tanpa sesi).
+- Browser 13/13 lulus (tambah: setelah logout, halaman login memakai tema terakhir admin).
+- PostgreSQL asli 6/6 lulus; benchmark tidak berubah signifikan dari Riwayat 4.2.0.
+- Migrasi `sql/006-tampilan-login.sql` (tanpa perubahan tabel; aman diulang) — idealnya dijalankan sebelum/saat deploy 4.2.1.

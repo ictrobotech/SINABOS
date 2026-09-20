@@ -135,3 +135,16 @@ test('saveTheme: admin menyimpan tema ke akun (terbaca via me), guru ditolak, te
  assert.equal(r2.tema,'profesional');
  ok(await call(db,'saveTheme',a,{tema:'modern',request_id:randomUUID()}));
 });
+
+test('siteTheme publik: halaman login mengikuti tema admin, tanpa sesi',async()=>{
+ const db=await database({migrate:true});
+ const baca=async()=>ok(await db.query("select public.sinabos_v4_api('siteTheme','', '{}'::jsonb,'ip-site-001') as r")).rows[0].result??(await db.query("select public.sinabos_v4_api('siteTheme','', '{}'::jsonb,'ip-site-001') as r")).rows[0].r;
+ const awal=await db.query("select public.sinabos_v4_api('siteTheme','', '{}'::jsonb,'ip-site-001') as r");
+ const v=awal.rows[0].r; assert.equal(v.ok,true); assert.equal(v.tema,'modern');
+ const a=await admin(db);
+ ok(await call(db,'saveTheme',a,{tema:'emerald',request_id:randomUUID()}));
+ const sesudah=await db.query("select public.sinabos_v4_api('siteTheme','', '{}'::jsonb,'ip-site-002') as r");
+ assert.equal(sesudah.rows[0].r.tema,'emerald');
+ ok(await call(db,'saveTheme',a,{tema:'modern',request_id:randomUUID()}));
+ await db.close();
+});

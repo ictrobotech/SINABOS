@@ -1,9 +1,9 @@
 import { neon } from '@neondatabase/serverless';
 
-export const VERSION = '4.2.0';
+export const VERSION = '4.2.1';
 const COOKIE = '__Host-sinabos';
 const MAX_BODY = 64 * 1024;
-const ACTIONS = new Set(['login','logout','me','changePassword','dashboard','books','scan','history','active','circulate','saveBook','stockIn','stockLoss','rombel','saveRombel','users','saveUser','resetPassword','resetBooks','saveTheme','report','audit','health','requestStatus']);
+const ACTIONS = new Set(['login','logout','me','changePassword','dashboard','books','scan','history','active','circulate','saveBook','stockIn','stockLoss','rombel','saveRombel','users','saveUser','resetPassword','resetBooks','saveTheme','siteTheme','report','audit','health','requestStatus']);
 const encoder = new TextEncoder();
 export const hex = buffer => Array.from(new Uint8Array(buffer), b => b.toString(16).padStart(2,'0')).join('');
 export const digest = async value => hex(await crypto.subtle.digest('SHA-256',encoder.encode(value)));
@@ -66,7 +66,7 @@ export async function handleAPI(request, env, dbOverride=null) {
   const data={...body.data};delete data.new_session_hash;
   if(encoder.encode(env.APP_SECRET || '').length<32) return failure('Konfigurasi aplikasi belum lengkap. Hubungi admin',503,'CONFIGURATION');
   let token=sessionCookie(request);
-  if(action!=='login' && !token) return failure('Silakan login terlebih dahulu',401,'UNAUTHENTICATED');
+  if(action!=='login' && action!=='siteTheme' && !token) return failure('Silakan login terlebih dahulu',401,'UNAUTHENTICATED');
   if(action==='login' && (typeof data.username!=='string' || !data.username.trim() || data.username.length>40 || typeof data.password!=='string' || encoder.encode(data.password).length>72 || !data.password)) return failure('Username dan password wajib diisi dengan format yang benar',422,'VALIDATION');
   const nextToken=(action==='login' || action==='changePassword') ? hex(crypto.getRandomValues(new Uint8Array(32))) : null;
   try {

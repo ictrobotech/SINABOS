@@ -519,6 +519,11 @@ BEGIN
   result:=public.sinabos_v4_dispatch('me',u,'{}');
   RETURN result||jsonb_build_object('ok',true,'server_date',(now() AT TIME ZONE 'Asia/Makassar')::date);
  END IF;
+ -- Tema untuk halaman login (sebelum sesi): mengikuti tema akun admin aktif pertama. Hanya baca; perubahan tetap lewat saveTheme admin.
+ IF p_action='siteTheme' THEN
+  IF NOT public.sinabos_v4_limit('site:'||p_ip_key,60,60) THEN RETURN jsonb_build_object('ok',false,'code','RATE_LIMIT','error','Terlalu banyak permintaan; tunggu satu menit','status',429); END IF;
+  RETURN jsonb_build_object('ok',true,'tema',coalesce((SELECT tema FROM public.sinabos_users WHERE role='admin' AND active ORDER BY id LIMIT 1),'modern'),'server_date',(now() AT TIME ZONE 'Asia/Makassar')::date);
+ END IF;
  SELECT a.* INTO u FROM public.sinabos_sessions s JOIN public.sinabos_users a ON a.id=s.user_id WHERE s.token_hash=p_session_hash AND s.expires_at>now() AND a.active;
  IF u.id IS NULL THEN
   IF NOT public.sinabos_v4_limit('unauth:'||p_ip_key,120,60) THEN RETURN jsonb_build_object('ok',false,'code','RATE_LIMIT','error','Terlalu banyak permintaan; tunggu satu menit','status',429); END IF;
