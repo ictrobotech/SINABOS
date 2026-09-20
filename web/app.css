@@ -42,3 +42,24 @@ html[data-theme=profesional] .story-footer{color:#8ea1b8}
 html[data-theme=profesional] .art-circle{border-color:#8fb0d633;box-shadow:0 0 0 20px #8fb0d60f,0 0 0 40px #8fb0d60a}
 html[data-theme=profesional] .login-security{color:#7e8fa3}
 html[data-theme=profesional] .theme-option[aria-pressed=true]{box-shadow:0 0 0 3px #2f5d8f26}
+/* ===== Laporan: tampilan cetak/PDF ===== */
+#report-print{display:none}
+body.printing-report #app{display:none!important}
+body.printing-report #report-print{display:block!important;background:#fff;color:#24203b;font-family:Inter,"Segoe UI",system-ui,sans-serif;font-size:12px;padding:28px 34px;min-height:100vh}
+body.printing-report #report-print .rp-head{display:flex;gap:14px;align-items:center;border-bottom:3px solid #5935a4;padding-bottom:14px;margin-bottom:16px}
+body.printing-report #report-print .rp-head img{width:52px;height:52px;object-fit:contain;background:#fff;border-radius:50%;border:1px solid #e7e5ed;padding:2px}
+body.printing-report #report-print h1{font-size:20px;color:#30205e;letter-spacing:-.4px;margin:0}
+body.printing-report #report-print p{margin:4px 0 0;color:#767287;font-size:11px}
+body.printing-report #report-print table{width:100%;border-collapse:collapse;print-color-adjust:exact;-webkit-print-color-adjust:exact}
+body.printing-report #report-print th{background:#5935a4;color:#fff;font-size:10px;letter-spacing:.4px;text-transform:uppercase;padding:9px 8px;border:1px solid #4a2c8f;text-align:left}
+body.printing-report #report-print td{padding:7px 8px;border:1px solid #e7e5ed;vertical-align:top}
+body.printing-report #report-print tbody tr:nth-child(even) td{background:#f6f3fb}
+body.printing-report #report-print td.t{text-align:center;font-weight:600}
+body.printing-report #report-print td.n,body.printing-report #report-print tfoot td.n{text-align:right;font-variant-numeric:tabular-nums}
+body.printing-report #report-print td.neg{color:#b4434d;font-weight:700}
+body.printing-report #report-print tfoot td{background:#eee8f8;font-weight:700;border-top:2px solid #5935a4}
+body.printing-report #report-print .rp-note{font-size:9.5px;color:#767287;margin:10px 0 26px}
+body.printing-report #report-print .rp-sign{display:flex;justify-content:space-between;gap:40px;margin-top:34px;font-size:11px;color:#24203b}
+body.printing-report #report-print .rp-sign>div{flex:1;text-align:center;line-height:1.8}
+body.printing-report #report-print .rp-sign span{display:inline-block;margin-top:6px;border-top:1px solid #24203b;padding-top:4px;min-width:180px}
+@media print{body.printing-report{margin:0}body.printing-report #report-print{padding:10mm 12mm;min-height:auto}@page{size:A4 landscape;margin:8mm}}
