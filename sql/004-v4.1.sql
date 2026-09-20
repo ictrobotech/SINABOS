@@ -1,5 +1,6 @@
 -- SINABOS 4.1.0 — tambahan untuk database yang SUDAH menjalankan 001-v4.sql (4.0.0).
 -- Isi: kolom ISBN & Edisi pada master buku + aksi admin resetBooks (reset inventaris sebelum transaksi pertama).
+-- Kolom baru ditambahkan DI UJUNG view agar CREATE OR REPLACE VIEW sah pada upgrade 4.0.0 → 4.1.0.
 -- File kecil: aman dijalankan lewat SQL Editor web Neon maupun psql. Idempotent — boleh dijalankan ulang.
 -- Instalasi baru tidak perlu file ini (001-v4.sql sudah memuat semuanya); menjalankannya tetap aman.
 BEGIN;
@@ -8,11 +9,11 @@ ALTER TABLE public.books ADD COLUMN IF NOT EXISTS isbn text;
 ALTER TABLE public.books ADD COLUMN IF NOT EXISTS edisi text;
 
 CREATE OR REPLACE VIEW public.sinabos_stock AS
-SELECT b.id,b.kode_buku,b.judul,b.mata_pelajaran,b.kelas_target,b.tahun_terbit,b.penulis,b.penerbit,b.kurikulum,b.sumber_buku,b.isbn,b.edisi,b.sumber_dana,b.aktif,b.revision,
+SELECT b.id,b.kode_buku,b.judul,b.mata_pelajaran,b.kelas_target,b.tahun_terbit,b.penulis,b.penerbit,b.kurikulum,b.sumber_buku,b.sumber_dana,b.aktif,b.revision,
  s.total_masuk AS total_buku,s.total_masuk,s.total_pinjam,s.total_kembali,(s.total_rusak+s.total_hilang)::int AS total_rusak_hilang,
  s.total_rusak,s.total_hilang,s.tersedia,
  coalesce((SELECT sum(l.sisa)::int FROM public.sinabos_loan_balances l WHERE l.buku_id=b.id AND l.sisa>0),0) AS dipinjam,
- b.legacy_total_buku,(coalesce(b.legacy_total_buku,0)>0 AND b.legacy_reviewed_at IS NULL AND s.total_masuk=0) AS needs_opening_review
+ b.legacy_total_buku,(coalesce(b.legacy_total_buku,0)>0 AND b.legacy_reviewed_at IS NULL AND s.total_masuk=0) AS needs_opening_review,b.isbn,b.edisi
 FROM public.books b JOIN public.sinabos_book_balances s ON s.buku_id=b.id;
 
 CREATE OR REPLACE FUNCTION public.sinabos_v4_dispatch(p_action text,u public.sinabos_users,p jsonb) RETURNS jsonb

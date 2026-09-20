@@ -200,11 +200,11 @@ BEGIN
 END $$;
 CREATE OR REPLACE TRIGGER sinabos_loan_insert AFTER INSERT ON public.circulation_items FOR EACH ROW EXECUTE FUNCTION public.sinabos_v4_loan_trigger();
 CREATE OR REPLACE VIEW public.sinabos_stock AS
-SELECT b.id,b.kode_buku,b.judul,b.mata_pelajaran,b.kelas_target,b.tahun_terbit,b.penulis,b.penerbit,b.kurikulum,b.sumber_buku,b.isbn,b.edisi,b.sumber_dana,b.aktif,b.revision,
+SELECT b.id,b.kode_buku,b.judul,b.mata_pelajaran,b.kelas_target,b.tahun_terbit,b.penulis,b.penerbit,b.kurikulum,b.sumber_buku,b.sumber_dana,b.aktif,b.revision,
  s.total_masuk AS total_buku,s.total_masuk,s.total_pinjam,s.total_kembali,(s.total_rusak+s.total_hilang)::int AS total_rusak_hilang,
  s.total_rusak,s.total_hilang,s.tersedia,
  coalesce((SELECT sum(l.sisa)::int FROM public.sinabos_loan_balances l WHERE l.buku_id=b.id AND l.sisa>0),0) AS dipinjam,
- b.legacy_total_buku,(coalesce(b.legacy_total_buku,0)>0 AND b.legacy_reviewed_at IS NULL AND s.total_masuk=0) AS needs_opening_review
+ b.legacy_total_buku,(coalesce(b.legacy_total_buku,0)>0 AND b.legacy_reviewed_at IS NULL AND s.total_masuk=0) AS needs_opening_review,b.isbn,b.edisi
 FROM public.books b JOIN public.sinabos_book_balances s ON s.buku_id=b.id;
 -- Pertahankan urutan/tipe kolom view v3 yang ada; perbaiki sumber saldonya tanpa DROP VIEW.
 DO $$ DECLARE cols text; BEGIN

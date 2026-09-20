@@ -1,6 +1,6 @@
 import { neon } from '@neondatabase/serverless';
 
-export const VERSION = '4.0.0';
+export const VERSION = '4.1.0';
 const COOKIE = '__Host-sinabos';
 const MAX_BODY = 64 * 1024;
 const ACTIONS = new Set(['login','logout','me','changePassword','dashboard','books','scan','history','active','circulate','saveBook','stockIn','stockLoss','rombel','saveRombel','users','saveUser','resetPassword','resetBooks','report','audit','health','requestStatus']);
