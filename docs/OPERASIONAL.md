@@ -31,6 +31,10 @@
 
 Ganti password merotasi sesi, sehingga tidak memakai panel retry transaksi. Muat ulang halaman dan coba masuk dengan password **baru**. Jika perubahan belum tersimpan dan password baru ditolak, gunakan password lama atau minta reset admin. Jangan mengulang banyak percobaan hingga terkena rate limit. Akun/ledger tidak dihapus oleh kegagalan respons ini.
 
+### Tampilan dan laporan
+
+Tema antarmuka (Pengaturan → Tampilan: Modern/Profesional/Emerald) tersimpan **per perangkat** dan diterapkan kembali saat login — mengubahnya tidak memengaruhi pengguna lain. Laporan Bulanan menyediakan "Unduh Excel" (.xls berwarna, siap diolah) dan "Unduh PDF" (dialog cetak A4 berisi kop, tabel berwarna, dan blok tanda tangan) untuk arsip kertas.
+
 ## Persediaan dan laporan
 
 - `Tersedia` adalah stok layak pinjam di rak.

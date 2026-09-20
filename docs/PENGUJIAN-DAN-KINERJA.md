@@ -108,3 +108,12 @@ Bukti lengkap ada di `artifacts/`. Trace/cache yang mungkin berisi cookie demo t
 Perubahan: kolom ISBN/Edisi (opsional, ISBN divalidasi karakter), aksi admin `resetBooks` yang menolak reset setelah transaksi pertama (teruji: guru ditolak 403, admin ditolak 409 saat ada transaksi, replay UUID aman), serta perapian label menu. Upgrade produksi dari 4.0.0 memakai `sql/004-v4.1.sql` (idempotent, teruji dijalankan ulang).
 
 Perbaikan upgrade: penambahan kolom ISBN/Edisi dipindah ke **ujung** view `sinabos_stock` (CREATE OR REPLACE VIEW PostgreSQL hanya mengizinkan kolom baru di akhir); ditambah uji khusus jalur upgrade dari struktur 4.0.0 dan uji sesi dibuat deterministik. Hasil akhir: **51/51** unit/DB/migrasi/CSV, **6/6** PostgreSQL native, **12/12** browser, kompilasi Wrangler sukses pada Node 22. Skema pengujian dan batas interpretasi pada bab sebelumnya tetap berlaku.
+
+
+## Riwayat 4.1.1 (21 Sep 2026)
+
+Perubahan: kolom username & password dibersihkan otomatis (muat halaman, setelah login sukses, logout); kolom barcode dikosongkan setelah transaksi tersimpan; Laporan Bulanan menggantikan "Unduh CSV" menjadi **Unduh Excel** (.xls SpreadsheetML berwarna: header, zebra, total, Δ negatif merah) dan menambah **Unduh PDF** (tampilan cetak A4 landscape dengan kop, baris total, dua blok tanda tangan; warna dipertahankan saat dicetak); **tiga tema** antarmuka (Modern ungu, Profesional navy, Emerald hijau) tersimpan per perangkat.
+
+Perbaikan tematik: gradasi kartu "Stok Tersedia", panel sambutan, dan ornamen dialihkan ke variabel tema sehingga ikut berganti warna pada ketiga tema — diuji dengan assertion computed-style (ungu→navy→hijau).
+
+Bukti final 4.1.1: **51/51** unit/DB/migrasi/CSV, **6/6** PostgreSQL native (benchmark segar: dashboard 4,44 ms; scan 1,03; books 1,19; history 1,33 median lokal), **13/13** browser. Catatan lingkungan: menjalankan suite unit dan native berurutan pada mesin 2 GB dapat memicu OOM-kill pada runner (SIGKILL) — jalankan terpisah; ini keterbatasan mesin uji, bukan cacat aplikasi.
