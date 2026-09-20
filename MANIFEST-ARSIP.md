@@ -1,4 +1,4 @@
-# Manifest Arsip Lengkap — SINABOS 4.1.0
+# Manifest Arsip Lengkap — SINABOS 4.2.0
 
 Arsip ini memuat **seluruh komponen aplikasi**: kode sumber, hasil build, skrip database, pengujian, bukti (evidence), konfigurasi, dan dokumentasi. Tidak ada kredensial di dalam arsip.
 
@@ -10,11 +10,11 @@ Arsip ini memuat **seluruh komponen aplikasi**: kode sumber, hasil build, skrip 
 | `server/` | `api.js` — seluruh logika batas HTTP (allowlist, cookie, limit, versi) | Dipakai demo & Function |
 | `functions/` | `api.js` — pintu masuk Cloudflare Pages Function | Tipis, memanggil `server/api.js` |
 | `scripts/` | `build.mjs` (build & hashing aset), `demo-server.mjs` (pratinjau lokal), `create-admin.mjs`, `create-runtime-role.mjs` (operator, **belum dijalankan**), `notices.mjs` | |
-| `sql/` | `000-preflight.sql`, `001-v4.sql` (instalasi penuh), `002-verify.sql`, `003-maintenance.sql`, `004-v4.1.sql` (ISBN/Edisi + resetBooks), `000-diagnostik-v4.sql` | Panduan perubahan: `docs/PANDUAN-PERUBAHAN-DATABASE.md` |
+| `sql/` | `000-preflight.sql`, `001-v4.sql` (instalasi penuh), `002-verify.sql`, `003-maintenance.sql`, `004-v4.1.sql` (ISBN/Edisi + resetBooks), `005-tema-akun.sql` (tema per akun 4.2.0 — jalankan SEBELUM deploy 4.2.0), `000-diagnostik-v4.sql` | Panduan perubahan: `docs/PANDUAN-PERUBAHAN-DATABASE.md` |
 | `public/` | **Hasil build siap deploy**: `index.html`, `assets/app-*.js` (hashed/immutable), CSS, logo, `THIRD_PARTY_NOTICES.txt` | Directory publish Cloudflare |
-| `tests/` | 51 uji unit/DB/migrasi/CSV (node:test + PGlite), `concurrency.pg.mjs` (PostgreSQL asli + benchmark), fixture schema v3, uji browser Playwright (13) | |
+| `tests/` | 52 uji unit/DB/migrasi/CSV (node:test + PGlite), `concurrency.pg.mjs` (PostgreSQL asli + benchmark), fixture schema v3, uji browser Playwright (13) | |
 | `docs/` | `CHECKLIST-DEPLOY.md` (langkah deployment berurutan), `PANDUAN-PERUBAHAN-DATABASE.md` (panduan perubahan DB masa depan — Neon + PostgreSQL lokal, dengan perintah lengkap), `MIGRASI.md` (detail teknis migrasi & cutover), `OPERASIONAL.md` (operasional harian, akun, pemulihan), `PENGUJIAN-DAN-KINERJA.md` (bukti & batas pengujian), `PEMETAAN-TEMUAN.md` (perbaikan temuan F01–F11) | |
-| `artifacts/` | **Bukti pengujian**: hasil 51 uji unit (TAP), PostgreSQL native + benchmark JSON, 13 uji browser, kompilasi Cloudflare, audit dependensi, tangkapan layar antarmuka, ukuran bundle | Data di dalamnya simulasi |
+| `artifacts/` | **Bukti pengujian**: hasil 52 uji unit (TAP), PostgreSQL native + benchmark JSON, 13 uji browser, kompilasi Cloudflare, audit dependensi, tangkapan layar antarmuka, ukuran bundle | Data di dalamnya simulasi |
 | `README.md` | Ringkasan, cara mulai, ringkasan fitur & validasi | Baca pertama |
 | `MANIFEST-ARSIP.md` | Berkas ini | |
 | `SHA256SUMS.txt` | Checksum SHA-256 seluruh file arsip (selain dirinya) | Verifikasi integritas |

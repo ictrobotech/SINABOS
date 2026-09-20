@@ -6,10 +6,10 @@
 
 | Kelompok | Hasil | Bukti |
 |---|---:|---|
-| HTTP/API, database/auth, formatter CSV, upgrade legacy | **48/48 lulus** | `artifacts/test-unit.tap` |
+| HTTP/API, database/auth, formatter CSV, upgrade legacy, tema per akun | **52/52 lulus** | `artifacts/test-unit.tap` |
 | PostgreSQL asli: multi-koneksi dan privilege/role runtime | **6/6 lulus** | `artifacts/postgres-concurrency-performance.json` |
-| Browser Chromium: desktop/mobile dan keamanan UI | **12/12 lulus** | `artifacts/browser-test-output.txt`, `browser-results.json` |
-| **Total skenario otomatis** | **66/66 lulus** | Kode dapat dijalankan ulang di `tests/` |
+| Browser Chromium: desktop/mobile dan keamanan UI | **13/13 lulus** | `artifacts/browser-test-output.txt`, `browser-results.json` |
+| **Total skenario otomatis** | **71/71 lulus** | Kode dapat dijalankan ulang di `tests/` |
 | Instalasi dependency Node 22 | Sukses | `artifacts/install-node22.txt` |
 | Build Cloudflare Pages Function | Sukses | `artifacts/cloudflare-build.txt` |
 | Audit dependency | Pemeriksaan awal 0 temuan; audit akhir terhalang maintenance npm 503 | `artifacts/install-node22.txt`, `npm-audit.json` |
@@ -117,3 +117,13 @@ Perubahan: kolom username & password dibersihkan otomatis (muat halaman, setelah
 Perbaikan tematik: gradasi kartu "Stok Tersedia", panel sambutan, dan ornamen dialihkan ke variabel tema sehingga ikut berganti warna pada ketiga tema — diuji dengan assertion computed-style (ungu→navy→hijau).
 
 Bukti final 4.1.1: **51/51** unit/DB/migrasi/CSV, **6/6** PostgreSQL native (benchmark segar: dashboard 4,44 ms; scan 1,03; books 1,19; history 1,33 median lokal), **13/13** browser. Catatan lingkungan: menjalankan suite unit dan native berurutan pada mesin 2 GB dapat memicu OOM-kill pada runner (SIGKILL) — jalankan terpisah; ini keterbatasan mesin uji, bukan cacat aplikasi.
+
+## Riwayat 4.2.0 (21 Sep 2026)
+
+Tema antarmuka kini tersimpan **per akun di database** (kolom `tema` pada tabel pengguna, default `modern`, hanya nilai Modern/Profesional/Emerald) sehingga tetap bertahan di semua perangkat dan browser, termasuk mesin bersama yang membersihkan data situs. Perubahan tema **hanya untuk admin**: guru tidak memiliki panel Tampilan, dan API menolak `saveTheme` dari guru dengan kode 403. Saat login tema akun langsung diterapkan; setelah keluar kembali ke tema default. Migrasi `sql/005-tema-akun.sql` wajib dijalankan di database produksi **sebelum** aplikasi 4.2.0 di-deploy.
+
+- Unit 52/52 lulus (tambah: simpan tema admin → `me` mengembalikan tema; guru `saveTheme` ditolak 403; tema tidak dikenal ditolak).
+- Browser 13/13 lulus (tambah: guru mobile tidak memiliki heading "Tampilan" maupun tombol tema; sidebar mobile kini dibuka lewat tombol menu sebelum mengecek halaman Pengaturan).
+- PostgreSQL asli 6/6 lulus. Benchmark lokal (median): dashboard 4,06 ms · simpan transaksi 1,46 ms · daftar buku 1,65 ms · riwayat 1,73 ms.
+- Catatan lingkungan: seluruh suite tidak dijalankan dalam satu proses bash yang sama (kotak uji 2 GB dapat kehabisan memori — lihat Riwayat 4.1.1); PG lokal 17 diprovisi ulang (initdb + role/database) karena direktori data tidak ikut tersimpan antar sesi.
+- Perbaikan kecil: bug fungsi `saveTheme` (variabel plpgsql `tema` bentrok dengan nama kolom → "column reference \"tema\" is ambiguous") ditemukan lewat pemanggilan dispatch langsung dan diperbaiki dengan mengganti nama variabel menjadi `v_tema` pada `001-v4.sql` dan `005-tema-akun.sql` sebelum rilis.

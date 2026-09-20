@@ -33,7 +33,7 @@ Ganti password merotasi sesi, sehingga tidak memakai panel retry transaksi. Muat
 
 ### Tampilan dan laporan
 
-Tema antarmuka (Pengaturan → Tampilan: Modern/Profesional/Emerald) tersimpan **per perangkat** dan diterapkan kembali saat login — mengubahnya tidak memengaruhi pengguna lain. Laporan Bulanan menyediakan "Unduh Excel" (.xls berwarna, siap diolah) dan "Unduh PDF" (dialog cetak A4 berisi kop, tabel berwarna, dan blok tanda tangan) untuk arsip kertas.
+Tema antarmuka (Pengaturan → Tampilan: Modern/Profesional/Emerald) tersimpan **per akun di database** dan diterapkan kembali di semua perangkat serta browser saat login — termasuk mesin bersama yang membersihkan data situs. Hanya admin yang dapat mengubah tema; akun guru tidak memiliki panel Tampilan dan server menolak upaya perubahan dari guru. Laporan Bulanan menyediakan "Unduh Excel" (.xls berwarna, siap diolah) dan "Unduh PDF" (dialog cetak A4 berisi kop, tabel berwarna, dan blok tanda tangan) untuk arsip kertas.
 
 ## Persediaan dan laporan
 

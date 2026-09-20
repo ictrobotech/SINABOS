@@ -122,3 +122,16 @@ test('004 upgrade dari view 4.0 (tanpa isbn/edisi): berhasil, idempotent, dan ko
  assert.ok(cnt>=0);
  await db2.close();
 });
+
+test('saveTheme: admin menyimpan tema ke akun (terbaca via me), guru ditolak, tema asing ditolak',async()=>{
+ const r1=ok(await call(db,'saveTheme',a,{tema:'emerald',request_id:randomUUID()}));
+ assert.equal(r1.tema,'emerald');
+ const me=ok(await call(db,'me',a));assert.equal(me.user.tema,'emerald');
+ const denied=await call(db,'saveTheme',g,{tema:'profesional',request_id:randomUUID()});
+ assert.equal(denied.code,'FORBIDDEN');
+ const bad=await call(db,'saveTheme',a,{tema:'ungu-neon',request_id:randomUUID()});
+ assert.equal(bad.ok,false);
+ const r2=ok(await call(db,'saveTheme',a,{tema:'profesional',request_id:randomUUID()}));
+ assert.equal(r2.tema,'profesional');
+ ok(await call(db,'saveTheme',a,{tema:'modern',request_id:randomUUID()}));
+});
