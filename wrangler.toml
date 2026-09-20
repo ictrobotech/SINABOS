@@ -1,0 +1,5 @@
+name = "sinabos"
+pages_build_output_dir = "./public"
+compatibility_date = "2026-09-20"
+compatibility_flags = ["nodejs_compat"]
+# Secrets DATABASE_URL dan APP_SECRET diatur melalui Cloudflare, bukan di sini.

@@ -1,0 +1,11 @@
+node_modules/
+.cache/
+.wrangler/
+.cf-check/
+.env*
+!.env.example
+.dev.vars*
+.runtime.*
+playwright-report/
+test-results/
+*.log
