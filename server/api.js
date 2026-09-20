@@ -3,7 +3,7 @@ import { neon } from '@neondatabase/serverless';
 export const VERSION = '4.0.0';
 const COOKIE = '__Host-sinabos';
 const MAX_BODY = 64 * 1024;
-const ACTIONS = new Set(['login','logout','me','changePassword','dashboard','books','scan','history','active','circulate','saveBook','stockIn','stockLoss','rombel','saveRombel','users','saveUser','resetPassword','report','audit','health','requestStatus']);
+const ACTIONS = new Set(['login','logout','me','changePassword','dashboard','books','scan','history','active','circulate','saveBook','stockIn','stockLoss','rombel','saveRombel','users','saveUser','resetPassword','resetBooks','report','audit','health','requestStatus']);
 const encoder = new TextEncoder();
 export const hex = buffer => Array.from(new Uint8Array(buffer), b => b.toString(16).padStart(2,'0')).join('');
 export const digest = async value => hex(await crypto.subtle.digest('SHA-256',encoder.encode(value)));

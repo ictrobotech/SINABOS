@@ -101,3 +101,10 @@ CSP produksi dicoba pada browser langsung. Pratinjau Arena sengaja mengizinkan i
 - Performa end-to-end produksi, semua kombinasi browser, kamera fisik, printer, dan kebijakan cookie pengguna.
 
 Bukti lengkap ada di `artifacts/`. Trace/cache yang mungkin berisi cookie demo tidak dimasukkan ke paket.
+
+
+## Riwayat 4.1.0 (20 Sep 2026)
+
+Perubahan: kolom ISBN/Edisi (opsional, ISBN divalidasi karakter), aksi admin `resetBooks` yang menolak reset setelah transaksi pertama (teruji: guru ditolak 403, admin ditolak 409 saat ada transaksi, replay UUID aman), serta perapian label menu. Upgrade produksi dari 4.0.0 memakai `sql/004-v4.1.sql` (idempotent, teruji dijalankan ulang).
+
+Hasil ulang paket 4.1: **50/50** unit/DB/migrasi/CSV, **6/6** PostgreSQL native, **12/12** browser, kompilasi Wrangler sukses pada Node 22. Skema pengujian dan batas interpretasi pada bab sebelumnya tetap berlaku.

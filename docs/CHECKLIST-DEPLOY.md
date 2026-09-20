@@ -11,6 +11,7 @@ Ikuti berurutan. Jangan melompat ke produksi sebelum staging lulus.
 2. Bila muncul banner merah **Failed transaction: ROLLBACK required** → klik **ROLLBACK**.
 3. Hapus/simpan-draft query tersimpan `001-v4` yang isinya diawali `-- QUERY TRUNCATED` — jangan pernah di-Run.
 4. Abaikan tulisan "Statement executed successfully" — itu hanya untuk statement yang sedang disorot (mis. `BEGIN`).
+5. **Kasus setengah-migrasi (terjadi pada 20 Sep 2026):** Run query terpotong dapat mengeksekusi sebagian statement awal dan membiarkannya ter-commit, sehingga sebagian struktur v4 (mis. kolom `revision`, `legacy_total_buku`) sudah ada tanpa fungsi/grant/backfill. Gejala: preflight menampilkan kolom v4 pada tabel lama. Jangan panik dan jangan jalankan 001-v4 langsung — jalankan `sql/000-diagnostik-v4.sql` (baca-saja) pada branch terkait, kirim hasilnya untuk dianalisis, lalu selesaikan migrasi dengan 001-v4 **utuh** lewat psql setelah pengaman data terpenuhi. Struktur setengah jadi tidak membuat v4 aktif dan situs v3 lama umumnya tetap melayani.
 
 ## Fase 1 — Siapkan alat di komputer operator
 
